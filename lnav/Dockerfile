@@ -7,17 +7,15 @@ RUN apt-get -y install zlib1g-dev autoconf automake autopoint autotools-dev debh
 
 RUN apt-get -y install lib32ncursesw5-dev lib32ncursesw5-dev libcurl4-openssl-dev libssl-dev
 
-RUN apt-get build-dep lnav -y
-
 # Install lnav
 ENV LNAV_VERSION master
 RUN curl -L https://github.com/tstack/lnav/archive/${LNAV_VERSION}.tar.gz | tar xz && \
     cd lnav-*/ && \
     ./autogen.sh && \
     CC=${CROSS_TRIPLE}-gcc CXX=${CROSS_TRIPLE}-g++ \
-    CFLAGS="${CFLAGS} -march=native -O3 -pipe" \
+    CFLAGS="${CFLAGS} -march=native -O2" \
     CXXFLAGS="${CXXFLAGS} ${CFLAGS}" \
-    ./configure --disable-silent-rules && \
+    ./configure --disable-shared && \
     make -j7 && \
     cd src && cp lnav lnav55425 && \
     rm -rf `pwd`
