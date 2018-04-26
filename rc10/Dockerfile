@@ -8,7 +8,7 @@ WORKDIR /build
 
 # Install Golang
 ENV BOOTSTRAP_GO_VERSION release-branch.go1.4
-ENV GO_VERSION go1.10.1
+ENV GO_VERSION release-branch.go1.10
 RUN cd /usr/local && \
     curl -L https://github.com/golang/go/archive/${BOOTSTRAP_GO_VERSION}.tar.gz | tar xvz && \
     cd /usr/local/go-${BOOTSTRAP_GO_VERSION}/src && \
@@ -21,7 +21,7 @@ RUN cd /usr/local/go-${GO_VERSION}/src && \
 ENV PATH ${PATH}:/usr/local/go-${GO_VERSION}/bin
 
 # Install OpenSSL
-ENV OPENSSL_VERSION 1.1.0h
+ENV OPENSSL_VERSION 1.0.1o
 RUN curl -L http://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz | tar xvz && \
     cd openssl-${OPENSSL_VERSION}/ && \
     sed -i -e '/^"linux-x86_64"/ s/-m64 -DL_ENDIAN -O3 -Wall/-march=westmere -O2 -pipe -m64 -DL_ENDIAN -Wall/' Configure && \
@@ -80,7 +80,7 @@ ENV CGO_ENABLED=1
 ENV CGO_NO_EMULATION=1
 RUN go get -u -v -ldflags "-s -w" github.com/beermix/torrent2http
 RUN ldd -v /usr/.go/bin/torrent2http
-RUN mv /usr/.go/bin/torrent2http /usr/.go/bin/torrent2http-RC1_0-311
+RUN mv /usr/.go/bin/torrent2http /usr/.go/bin/torrent2http-RC1_0-315
 VOLUME /usr/.go/bin /pkg
 
 WORKDIR /
