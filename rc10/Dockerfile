@@ -4,7 +4,7 @@ FROM cross-compiler:linux-x64
 RUN mkdir -p /build
 WORKDIR /build
 
-#RUN apt-get update -y && apt-get upgrade -y && apt-get dist-upgrade -y
+RUN apt-get update -y && apt-get upgrade -y && apt-get dist-upgrade -y && apt-get install gccgo -y
 
 # Install Golang
 ENV BOOTSTRAP_GO_VERSION release-branch.go1.4
@@ -76,11 +76,9 @@ RUN curl -L https://github.com/arvidn/libtorrent/archive/`echo ${LIBTORRENT_VERS
 # Build
 ENV GOPATH=/usr/.go
 ENV GOOS=linux
-ENV CGO_ENABLED=1
-ENV CGO_NO_EMULATION=1
-RUN go get -u -v -ldflags "-s -w" github.com/beermix/torrent2http
+RUN go get -u -v -ldflags '-s -w' github.com/beermix/torrent2http
 RUN ldd -v /usr/.go/bin/torrent2http
-RUN mv /usr/.go/bin/torrent2http /usr/.go/bin/torrent2http-RC1_0-315
+RUN mv /usr/.go/bin/torrent2http /usr/.go/bin/torrent2http-RC1_0-444
 VOLUME /usr/.go/bin /pkg
 
 WORKDIR /
