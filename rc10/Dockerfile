@@ -4,11 +4,11 @@ FROM cross-compiler:linux-x64
 RUN mkdir -p /build
 WORKDIR /build
 
-RUN apt-get update -y && apt-get upgrade -y && apt-get dist-upgrade -y && apt-get install gccgo -y
+#RUN apt-get update -y && apt-get upgrade -y && apt-get dist-upgrade -y && apt-get install gccgo -y
 
 # Install Golang
 ENV BOOTSTRAP_GO_VERSION release-branch.go1.4
-ENV GO_VERSION release-branch.go1.10
+ENV GO_VERSION release-branch.go1.9
 RUN cd /usr/local && \
     curl -L https://github.com/golang/go/archive/${BOOTSTRAP_GO_VERSION}.tar.gz | tar xvz && \
     cd /usr/local/go-${BOOTSTRAP_GO_VERSION}/src && \
@@ -24,14 +24,14 @@ ENV PATH ${PATH}:/usr/local/go-${GO_VERSION}/bin
 ENV OPENSSL_VERSION 1.0.1o
 RUN curl -L http://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz | tar xvz && \
     cd openssl-${OPENSSL_VERSION}/ && \
-    sed -i -e '/^"linux-x86_64"/ s/-m64 -DL_ENDIAN -O3 -Wall/-march=westmere -O2 -pipe -m64 -DL_ENDIAN -Wall/' Configure && \
+    sed -i -e '/^"linux-x86_64"/ s/-m64 -DL_ENDIAN -O3 -Wall/-march=westmere -O3 -m64 -DL_ENDIAN -Wall/' Configure && \
     CROSS_COMPILE=${CROSS_TRIPLE}- ./Configure threads no-shared no-zlib no-zlib-dynamic enable-ec_nistp_64_gcc_128 linux-x86_64 --prefix=${CROSS_ROOT} && \
     make && make install_sw && \
     rm -rf `pwd`
 
 # Install Boost
-ENV BOOST_VERSION 1.64.0
-RUN curl -#L https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.tar.gz | tar xz && \
+ENV BOOST_VERSION 1.62.0
+RUN curl -#L https://dl.bintray.com/boostorg/release/1.62.0/source/boost_1_62_0.tar.gz | tar xz && \
     cd boost* && \
     ./bootstrap.sh --prefix=${CROSS_ROOT} && \
     echo "using gcc : linux : ${CROSS_TRIPLE}-c++ ;" > ${HOME}/user-config.jam && \
@@ -78,7 +78,7 @@ ENV GOPATH=/usr/.go
 ENV GOOS=linux
 RUN go get -u -v -ldflags '-s -w' github.com/beermix/torrent2http
 RUN ldd -v /usr/.go/bin/torrent2http
-RUN mv /usr/.go/bin/torrent2http /usr/.go/bin/torrent2http-RC1_0-444
+RUN mv /usr/.go/bin/torrent2http /usr/.go/bin/torrent2http-RC1_0-500
 VOLUME /usr/.go/bin /pkg
 
 WORKDIR /
