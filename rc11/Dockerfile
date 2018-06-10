@@ -79,7 +79,7 @@ ENV CGO_ENABLED=1
 ENV CGO_NO_EMULATION=1
 RUN go get -u -v -buildmode=pie -ldflags "-s -w" github.com/dimitriss/torrent2http
 RUN ldd -v /usr/.go/bin/torrent2http
-RUN mv /usr/.go/bin/torrent2http /usr/.go/bin/torrent2http-RC1_1-1_406
+RUN mv /usr/.go/bin/torrent2http /usr/.go/bin/torrent2http-RC1_1-1_415
 #VOLUME /usr/.go/bin /pkg
 
 WORKDIR /
