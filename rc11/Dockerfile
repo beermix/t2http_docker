@@ -4,11 +4,11 @@ FROM cross-compiler:linux-x64
 RUN mkdir -p /build
 WORKDIR /build
 
-#RUN apt update -y && apt upgrade -y && apt dist-upgrade -y
+#RUN apt update -y && apt upgrade -y && apt dist-upgrade -y && echo oo
 
 # Install Golang
 ENV BOOTSTRAP_GO_VERSION release-branch.go1.4
-ENV GO_VERSION release-branch.go1.9
+ENV GO_VERSION release-branch.go1.10
 RUN cd /usr/local && \
     curl -L https://github.com/golang/go/archive/${BOOTSTRAP_GO_VERSION}.tar.gz | tar xvz && \
     cd /usr/local/go-${BOOTSTRAP_GO_VERSION}/src && \
@@ -30,8 +30,8 @@ RUN curl -L http://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz | ta
     rm -rf `pwd`
 
 # Install Boost
-ENV BOOST_VERSION 1_64_0
-RUN curl -L https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.tar.gz | tar xvz && \
+ENV BOOST_VERSION 1_63_0
+RUN curl -L https://dl.bintray.com/boostorg/release/1.63.0/source/boost_1_63_0.tar.gz | tar xvz && \
     cd boost* && \
     ./bootstrap.sh --prefix=${CROSS_ROOT} && \
     echo "using gcc : linux : ${CROSS_TRIPLE}-c++ ;" > ${HOME}/user-config.jam && \
@@ -77,9 +77,10 @@ ENV GOPATH=/usr/.go
 ENV GOOS=linux
 ENV CGO_ENABLED=1
 ENV CGO_NO_EMULATION=1
-RUN go get -u -v -buildmode=pie -ldflags "-s -w" github.com/dimitriss/torrent2http
+ENV HTTP_PROXY "http://192.168.1.2:999"
+RUN go get -u -v -ldflags "-s -w" github.com/dimitriss/torrent2http
 RUN ldd -v /usr/.go/bin/torrent2http
-RUN mv /usr/.go/bin/torrent2http /usr/.go/bin/torrent2http-RC1_1-1_415
+RUN mv /usr/.go/bin/torrent2http /usr/.go/bin/torrent2http-RC1_1-1_419
 #VOLUME /usr/.go/bin /pkg
 
 WORKDIR /

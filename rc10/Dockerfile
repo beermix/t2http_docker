@@ -8,7 +8,7 @@ WORKDIR /build
 
 # Install Golang
 ENV BOOTSTRAP_GO_VERSION release-branch.go1.4
-ENV GO_VERSION release-branch.go1.9
+ENV GO_VERSION release-branch.go1.10
 RUN cd /usr/local && \
     curl -L https://github.com/golang/go/archive/${BOOTSTRAP_GO_VERSION}.tar.gz | tar xvz && \
     cd /usr/local/go-${BOOTSTRAP_GO_VERSION}/src && \
@@ -30,8 +30,8 @@ RUN curl -L http://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz | ta
     rm -rf `pwd`
 
 # Install Boost
-ENV BOOST_VERSION 1.62.0
-RUN curl -#L https://dl.bintray.com/boostorg/release/1.62.0/source/boost_1_62_0.tar.gz | tar xz && \
+ENV BOOST_VERSION 1.63.0
+RUN curl -L https://dl.bintray.com/boostorg/release/1.63.0/source/boost_1_63_0.tar.gz | tar xz && \
     cd boost* && \
     ./bootstrap.sh --prefix=${CROSS_ROOT} && \
     echo "using gcc : linux : ${CROSS_TRIPLE}-c++ ;" > ${HOME}/user-config.jam && \
@@ -76,9 +76,10 @@ RUN curl -L https://github.com/arvidn/libtorrent/archive/`echo ${LIBTORRENT_VERS
 # Build
 ENV GOPATH=/usr/.go
 ENV GOOS=linux
+ENV HTTP_PROXY "http://192.168.1.2:999"
 RUN go get -u -v -ldflags '-s -w' github.com/beermix/torrent2http
 RUN ldd -v /usr/.go/bin/torrent2http
-RUN mv /usr/.go/bin/torrent2http /usr/.go/bin/torrent2http-RC1_0-500
+RUN mv /usr/.go/bin/torrent2http /usr/.go/bin/torrent2http-RC1_0-501
 VOLUME /usr/.go/bin /pkg
 
 WORKDIR /
