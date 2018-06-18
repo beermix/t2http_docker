@@ -1,4 +1,4 @@
-FROM cross-compiler:linux-x86
+FROM cross-compiler:linux-x64
 
 RUN mkdir -p /build
 WORKDIR /build
@@ -13,7 +13,7 @@ RUN curl -L https://github.com/tstack/lnav/archive/${LNAV_VERSION}.tar.gz | tar 
     cd lnav-*/ && \
     ./autogen.sh && \
     CC=${CROSS_TRIPLE}-gcc CXX=${CROSS_TRIPLE}-g++ \
-    CFLAGS="${CFLAGS} -march=native -O2" \
+    CFLAGS="${CFLAGS} -march=westmere -O2" \
     CXXFLAGS="${CXXFLAGS} ${CFLAGS}" \
     ./configure --disable-shared && \
     make -j7 && \
