@@ -14,10 +14,10 @@ RUN curl -L https://github.com/tstack/lnav/archive/${LNAV_VERSION}.tar.gz | tar 
     ./autogen.sh && \
     CC=${CROSS_TRIPLE}-gcc CXX=${CROSS_TRIPLE}-g++ \
     CFLAGS="${CFLAGS} -march=westmere -O2" \
-    CXXFLAGS="${CXXFLAGS} ${CFLAGS}" \
+    CXXFLAGS="${CXXFLAGS} ${CFLAGS}" LDFLAGS="-s" \
     ./configure --disable-shared && \
     make -j7 && \
-    cd src && cp lnav lnav55425 && \
+    cd src && cp lnav lnav55600 && \
     rm -rf `pwd`
 
 WORKDIR /
