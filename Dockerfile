@@ -4,11 +4,12 @@ RUN mkdir -p /build
 WORKDIR /build
 
 #RUN apt-get -y install libboost-system-dev libboost-python-dev libboost-chrono-dev libboost-random-dev libssl1.0-dev
-RUN apt-get update -y && apt-get upgrade -y && apt-get dist-upgrade -y
+#RUN apt-get update -y && apt-get upgrade -y && apt-get dist-upgrade -y
+
 
 # Install Golang
 ENV BOOTSTRAP_GO_VERSION release-branch.go1.4
-ENV GO_VERSION go1.9.1
+ENV GO_VERSION go1.11
 RUN cd /usr/local && \
     curl -L https://github.com/golang/go/archive/${BOOTSTRAP_GO_VERSION}.tar.gz | tar xvz && \
     cd /usr/local/go-${BOOTSTRAP_GO_VERSION}/src && \
@@ -20,14 +21,16 @@ RUN cd /usr/local/go-${GO_VERSION}/src && \
     GOROOT_BOOTSTRAP=/usr/local/go-${BOOTSTRAP_GO_VERSION} GOOS=linux GOARCH=amd64 CGO_ENABLED=1 ./make.bash
 ENV PATH ${PATH}:/usr/local/go-${GO_VERSION}/bin
 
+
 # Install OpenSSL
-ENV OPENSSL_VERSION 1.0.2l
+ENV OPENSSL_VERSION 1.1.1a
 RUN curl -L http://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz | tar xvz && \
     cd openssl-${OPENSSL_VERSION}/ && \
     sed -i -e '/^"linux-x86_64"/ s/-m64 -DL_ENDIAN -O3 -Wall/-m64 -DL_ENDIAN -O2  -Wall/' Configure && \
-    CROSS_COMPILE=${CROSS_TRIPLE}- ./Configure shared threads no-krb5 no-ssl3-method enable-ec_nistp_64_gcc_128 linux-x86_64 --prefix=${CROSS_ROOT} && \
+    CROSS_COMPILE=${CROSS_TRIPLE}- ./Configure shared threads no-ssl3-method enable-ec_nistp_64_gcc_128 linux-x86_64 --prefix=${CROSS_ROOT} && \
     make && make install_sw && \
     rm -rf `pwd`
+
 
 # Install Boost
 ENV BOOST_VERSION 1.64.0
@@ -39,6 +42,7 @@ RUN curl -L https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.t
     rm -rf ${HOME}/user-config.jam && \
     rm -rf `pwd`
 
+
 # Install SWIG
 #ENV SWIG_VERSION 1079ba7
 ENV SWIG_VERSION rel-3.0.12
@@ -48,6 +52,7 @@ RUN curl -L https://github.com/swig/swig/archive/${SWIG_VERSION}.tar.gz | tar xv
     ./configure && \
     make -j $(cat /proc/cpuinfo | grep processor | wc -l) && make install && \
     rm -rf `pwd`
+
 
 # Install libtorrent
 ENV LIBTORRENT_VERSION RC_1_1
@@ -70,6 +75,7 @@ RUN curl -L https://github.com/arvidn/libtorrent/archive/`echo ${LIBTORRENT_VERS
     \
     make -j $(cat /proc/cpuinfo | grep processor | wc -l) && make install && \
     rm -rf `pwd`
+
 
 # Build
 ENV GOPATH=/usr/.go

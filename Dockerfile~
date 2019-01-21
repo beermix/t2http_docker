@@ -23,7 +23,7 @@ ENV PATH ${PATH}:/usr/local/go-${GO_VERSION}/bin
 
 
 # Install OpenSSL
-ENV OPENSSL_VERSION 1.0.2l
+ENV OPENSSL_VERSION 1.0.2q
 RUN curl -L http://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz | tar xvz && \
     cd openssl-${OPENSSL_VERSION}/ && \
     CROSS_COMPILE=${CROSS_TRIPLE}- ./Configure no-shared threads no-zlib no-zlib-dynamic enable-ec_nistp_64_gcc_128 linux-x86_64 --prefix=${CROSS_ROOT} && \
