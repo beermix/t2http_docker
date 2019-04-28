@@ -13,12 +13,12 @@ ENV GO_VERSION go1.12
 RUN cd /usr/local && \
     curl -L https://github.com/golang/go/archive/${BOOTSTRAP_GO_VERSION}.tar.gz | tar xvz && \
     cd /usr/local/go-${BOOTSTRAP_GO_VERSION}/src && \
-    GOOS=linux GOARCH=amd64 CGO_ENABLED=1 ./make.bash
+    GOOS=linux GOARCH=amd64 CGO_ENABLED=1 ./make.bash --no-clean -v
 RUN cd /usr/local && \
     curl -L https://github.com/golang/go/archive/${GO_VERSION}.tar.gz | tar xvz
 RUN cd /usr/local/go-${GO_VERSION}/src && \
 	echo ${GO_VERSION} > /usr/local/go-${GO_VERSION}/VERSION && \
-    GOROOT_BOOTSTRAP=/usr/local/go-${BOOTSTRAP_GO_VERSION} GOOS=linux GOARCH=amd64 CGO_ENABLED=1 ./make.bash
+    GOROOT_BOOTSTRAP=/usr/local/go-${BOOTSTRAP_GO_VERSION} GOOS=linux GOARCH=amd64 CGO_ENABLED=1 ./make.bash --no-clean -v
 ENV PATH ${PATH}:/usr/local/go-${GO_VERSION}/bin
 
 
@@ -33,8 +33,8 @@ RUN curl -L http://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz | ta
 
 
 # Install Boost
-ENV BOOST_VERSION 1.64.0
-RUN curl -L https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.tar.gz | tar xvz && \
+ENV BOOST_VERSION 1.63.0
+RUN curl -L https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_63_0.tar.gz | tar xvz && \
     cd boost* && \
     ./bootstrap.sh --prefix=${CROSS_ROOT} && \
     echo "using gcc : linux : ${CROSS_TRIPLE}-c++ ;" > ${HOME}/user-config.jam && \
@@ -44,8 +44,8 @@ RUN curl -L https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.t
 
 
 # Install SWIG
-#ENV SWIG_VERSION 1079ba7
-ENV SWIG_VERSION rel-3.0.12
+ENV SWIG_VERSION 1079ba7
+#ENV SWIG_VERSION rel-3.0.12
 RUN curl -L https://github.com/swig/swig/archive/${SWIG_VERSION}.tar.gz | tar xvz && \
     cd swig* && \
     ./autogen.sh && \
@@ -55,7 +55,7 @@ RUN curl -L https://github.com/swig/swig/archive/${SWIG_VERSION}.tar.gz | tar xv
 
 
 # Install libtorrent
-ENV LIBTORRENT_VERSION RC_1_1
+ENV LIBTORRENT_VERSION RC_1_0
 RUN curl -L https://github.com/arvidn/libtorrent/archive/`echo ${LIBTORRENT_VERSION} | sed 's/\\./_/g'`.tar.gz | tar xz && \
     cd libtorren* && \
     ./autotool.sh && \
@@ -83,11 +83,11 @@ ENV GOOS=linux
 #ENV CGO_ENABLED=1
 #ENV CGO_NO_EMULATION=1
 #ENV CGO_CFLAGS="-march=native -O2 -pipe"
-RUN go get -u -v -buildmode=pie -ldflags "-s -w" github.com/afedchin/torrent2http
-#RUN go get -u -v -buildmode=exe -ldflags "-s -w" github.com/beermix/torrent2http
+#RUN go get -u -v -buildmode=pie -ldflags "-s -w" github.com/afedchin/torrent2http
+RUN go get -u -v -buildmode=exe -ldflags "-s -w" github.com/beermix/torrent2http
 #RUN go get -u -v -buildmode=exe -ldflags "-s -w"  -extldflags -static" github.com/dimitriss/torrent2http
 #RUN go get -u -v -buildmode=exe -ldflags "-s -w" github.com/dimitriss/torrent2http
 RUN ldd -v /usr/.go/bin/torrent2http
-RUN mv /usr/.go/bin/torrent2http /usr/.go/bin/torrent2http-RC1_1-70
+RUN mv /usr/.go/bin/torrent2http /usr/.go/bin/torrent2http-RC1_0-70
 
 WORKDIR /
