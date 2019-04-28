@@ -9,7 +9,7 @@ WORKDIR /build
 
 # Install Golang
 ENV BOOTSTRAP_GO_VERSION release-branch.go1.4
-ENV GO_VERSION go1.11
+ENV GO_VERSION go1.12
 RUN cd /usr/local && \
     curl -L https://github.com/golang/go/archive/${BOOTSTRAP_GO_VERSION}.tar.gz | tar xvz && \
     cd /usr/local/go-${BOOTSTRAP_GO_VERSION}/src && \
@@ -23,7 +23,7 @@ ENV PATH ${PATH}:/usr/local/go-${GO_VERSION}/bin
 
 
 # Install OpenSSL
-ENV OPENSSL_VERSION 1.1.1a
+ENV OPENSSL_VERSION 1.1.1b
 RUN curl -L http://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz | tar xvz && \
     cd openssl-${OPENSSL_VERSION}/ && \
     sed -i -e '/^"linux-x86_64"/ s/-m64 -DL_ENDIAN -O3 -Wall/-m64 -DL_ENDIAN -O2  -Wall/' Configure && \
