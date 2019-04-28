@@ -23,7 +23,7 @@ ENV PATH ${PATH}:/usr/local/go-${GO_VERSION}/bin
 
 
 # Install OpenSSL
-ENV OPENSSL_VERSION 1.0.2q
+ENV OPENSSL_VERSION 1.0.2r
 RUN curl -L http://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz | tar xvz && \
     cd openssl-${OPENSSL_VERSION}/ && \
     CROSS_COMPILE=${CROSS_TRIPLE}- ./Configure no-shared threads no-zlib no-zlib-dynamic enable-ec_nistp_64_gcc_128 linux-x86_64 --prefix=${CROSS_ROOT} && \
@@ -41,7 +41,7 @@ RUN curl -L https://dl.bintray.com/boostorg/release/1.63.0/source/boost_1_63_0.t
     ./b2 --with-date_time --with-system --with-chrono --with-random --with-system --prefix=${CROSS_ROOT} cxxflags=-fPIC cflags=-fPIC toolset=gcc-linux link=static variant=release threading=multi target-os=linux install && \
     rm -rf ${HOME}/user-config.jam && \
     rm -rf `pwd`
-    
+
 
 # Install SWIG
 #ENV SWIG_VERSION 1079ba7

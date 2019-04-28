@@ -80,14 +80,14 @@ RUN curl -L https://github.com/arvidn/libtorrent/archive/`echo ${LIBTORRENT_VERS
 # Build
 ENV GOPATH=/usr/.go
 ENV GOOS=linux
-ENV CGO_ENABLED=1
-ENV CGO_NO_EMULATION=1
-ENV CGO_CFLAGS="-march=native -O2 -pipe"
+#ENV CGO_ENABLED=1
+#ENV CGO_NO_EMULATION=1
+#ENV CGO_CFLAGS="-march=native -O2 -pipe"
 RUN go get -u -v -buildmode=pie -ldflags "-s -w" github.com/afedchin/torrent2http
 #RUN go get -u -v -buildmode=exe -ldflags "-s -w" github.com/beermix/torrent2http
 #RUN go get -u -v -buildmode=exe -ldflags "-s -w"  -extldflags -static" github.com/dimitriss/torrent2http
 #RUN go get -u -v -buildmode=exe -ldflags "-s -w" github.com/dimitriss/torrent2http
 RUN ldd -v /usr/.go/bin/torrent2http
-RUN mv /usr/.go/bin/torrent2http /usr/.go/bin/torrent2http-RC1_1-67
+RUN mv /usr/.go/bin/torrent2http /usr/.go/bin/torrent2http-RC1_1-70
 
 WORKDIR /
