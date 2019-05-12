@@ -9,7 +9,7 @@ WORKDIR /build
 
 # Install Golang
 ENV BOOTSTRAP_GO_VERSION release-branch.go1.4
-ENV GO_VERSION go1.8
+ENV GO_VERSION go1.12
 RUN cd /usr/local && \
     curl -L https://github.com/golang/go/archive/${BOOTSTRAP_GO_VERSION}.tar.gz | tar xvz && \
     cd /usr/local/go-${BOOTSTRAP_GO_VERSION}/src && \
@@ -84,9 +84,9 @@ ENV GOOS=linux
 #ENV CGO_NO_EMULATION=1
 #ENV CGO_CFLAGS="-march=native -O2 -pipe"
 #RUN go get -u -v -buildmode=pie -ldflags "-s -w" github.com/afedchin/torrent2http
-RUN go get -u -v -buildmode=exe -ldflags "-s -w" github.com/beermix/torrent2http
+#RUN go get -u -v -buildmode=exe -ldflags "-s -w" github.com/beermix/torrent2http
 #RUN go get -u -v -buildmode=exe -ldflags "-s -w"  -extldflags -static" github.com/dimitriss/torrent2http
-#RUN go get -u -v -buildmode=exe -ldflags "-s -w" github.com/dimitriss/torrent2http
+RUN go get -u -v -buildmode=exe -ldflags "-s -w" github.com/dimitriss/torrent2http
 RUN ldd -v /usr/.go/bin/torrent2http
 RUN mv /usr/.go/bin/torrent2http /usr/.go/bin/torrent2http-RC1_0-70
 
